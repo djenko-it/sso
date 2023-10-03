@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  portainer:
+    image: portainer/portainer
+    container_name: portainer
+    ports:
+      - "9090:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: always
+    networks:
+      - proxy_nginx-proxy
+
+networks:
+  proxy_nginx-proxy:
+    external: true
+
+volumes:
+  portainer_data:

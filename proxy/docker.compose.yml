@@ -1,0 +1,40 @@
+version: '3'
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: proxy-manager
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./config.json:/app/config/production.json
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    depends_on:
+      - proxydb
+    networks:
+      - nginx-proxy
+
+  proxydb:
+    image: 'yobasystems/alpine-mariadb:latest'
+    container_name: proxy-manager-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 'somestrongrootpassword'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: 'user-from-config.json'
+      MYSQL_PASSWORD: 'password-from=config.json'
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    networks:
+      - nginx-proxy
+
+volumes:
+  mysql:
+  data:
+  letsencrypt:
+
+networks:
+  nginx-proxy:
