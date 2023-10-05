@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    image: 'lemonldap-ng:version:latest'
+    image: 'coudot/lemonldap-ng:latest'
     container_name: lemon
     restart: unless-stopped
     ports:
