@@ -34,6 +34,7 @@ services:
   server:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2023.8.3}
     restart: unless-stopped
+    container_name: authentik
     command: server
     environment:
       AUTHENTIK_REDIS__HOST: redis
@@ -79,6 +80,12 @@ services:
     depends_on:
       - postgresql
       - redis
+    networks:
+      - proxy_nginx-proxy
+
+networks:
+  proxy_nginx-proxy:
+    external: true
 
 volumes:
   database:
